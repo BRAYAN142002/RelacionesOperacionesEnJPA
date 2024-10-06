@@ -66,7 +66,8 @@ public class RelacionesJpaApplication implements CommandLineRunner{
 	public void crearCurso(){
 		
 		Curso objCurso=new Curso("Curso Ingenieria grup 1");
-		List<Docente>listaDocentes=new  ArrayList<>();
+		List<Docente> listaDocentes=new  ArrayList<>();
+		Asignatura asignatura=null;
 
 		Optional<Docente> objDocente=this.servicioBDDocente.findById(1);
 
@@ -76,32 +77,47 @@ public class RelacionesJpaApplication implements CommandLineRunner{
 			System.out.println("El docente no esta creado");
 		}
 
-		
+		Optional<Asignatura> objAsignatura=this.servicioBDAsignatura.findById(1);
 
-		
+		if(objAsignatura!=null){
+			asignatura=objAsignatura.get();
+		}else{
+			System.out.println("La asignatura no esta creada");
+		}
 
-	
-
-			objCurso.setListaDocentes(listaDocetes);
-			objCurso.setObjAsignatura(objAsignatura);
+			objCurso.setListaDocentes(listaDocentes);
+			objCurso.setObjAsignatura(asignatura);
 			this.servicioBDCurso.save(objCurso);
-
 	}
+
+	public void almacenarEspacioFisico(){
+		EspacioFisico objEspacioFisico=new EspacioFisico("Sala 2", 23);
+		this.servicioBDEspacioFisico.save(objEspacioFisico);
+	}
+
 	public void crearFranjaHoraria(){
-			Curso objCurso=new Curso("Curso Ingenieria grupo 2");
-			this.servicioBDCurso.save(objCurso);
+		Curso curso=null;
+		EspacioFisico espacioFisico=null;
 
-			EspacioFisico objEspacioFisico=new EspacioFisico("Sala 2", 23);
+		Optional<Curso> objCurso=this.servicioBDCurso.findById(1);
+		if(objCurso!=null){
+			curso=objCurso.get();
+		}else{
+			System.out.println("El curso no ha sido creado ");
+		}
 
-			this.servicioBDEspacioFisico.save(objEspacioFisico);
-
+		Optional<EspacioFisico> objEspacioFisico=this.servicioBDEspacioFisico.findById(1);
+		if(objEspacioFisico!=null){
+			espacioFisico=objEspacioFisico.get();
+		}else{
+			System.out.println("El espacio fisico no ha sido creado");
+		}
 
 		Time horaInicio = Time.valueOf("07:00:00"); 
         Time horaFin = Time.valueOf("9:00:00"); 
-			FranjaHoraria objFranjaHoraria=new FranjaHoraria("martes",horaInicio,horaFin);
-
-		objFranjaHoraria.setObjCurso(objCurso);
-		objFranjaHoraria.setObjEspacioFisico(objEspacioFisico);
+		FranjaHoraria objFranjaHoraria=new FranjaHoraria("martes",horaInicio,horaFin);
+		objFranjaHoraria.setObjCurso(curso);
+		objFranjaHoraria.setObjEspacioFisico(espacioFisico);
 
 		this.servicioBDFranjaHoraria.save(objFranjaHoraria);
 	}
@@ -118,12 +134,38 @@ public class RelacionesJpaApplication implements CommandLineRunner{
 
 	}
 	public void consultarFranjaHorariaporDcente(){
-		Iterable<Docente> objDocente=this.servicioBDDocente.findAll();
+		Optional<Docente> objDocente=this.servicioBDDocente.findById(1);
 		
+
+		if(objDocente!=null){
+			System.out.println("Id:"+objDocente.get().getId());
+			System.out.println("Nombre: "+objDocente.get().getNombre());
+			System.out.println("Apelldio: "+objDocente.get().getApellido());
+			System.out.println("Correo: "+objDocente.get().getCorreo());
+			for(Curso objCurso: objDocente.get().getListaCursos()){
+				System.out.println("id del curso: "+objCurso.getId());
+				System.out.println("Nombre del curso: "+objCurso.getNombre());
+				for(FranjaHoraria objFranja: objCurso.getFranjasHorarias()){
+					System.out.println("id Franja: "+objFranja.getId());
+					System.out.println("Dia: "+objFranja.getDia());
+					System.out.println("Hora Inicio: "+objFranja.getHora_inicio());
+					System.out.println("Hora Fin: "+objFranja.getHora_fin());
+					System.out.println("Id espacio Fisico: "+objFranja.getObjEspacioFisico().getId());
+					System.out.println("Nombre de espacio fisico: "+objFranja.getObjEspacioFisico().getNombre());
+					System.out.println("Capacidad de espacio fisico: "+objFranja.getObjEspacioFisico().getCapacidad());
+
+				}
+			}
+
+		}else{
+			System.out.println("El docente no esta creado");
+		}
+
 
 
 	}
 	public void eliminarCurso(){
-		
+		this.servicioBDCurso.deleteById(1);
+
 	}
 }
