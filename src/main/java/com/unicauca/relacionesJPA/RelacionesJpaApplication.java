@@ -46,8 +46,27 @@ public class RelacionesJpaApplication implements CommandLineRunner{
 
 	@Override
 	public void run(String... args) throws Exception {
-		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException("Unimplemented method 'run'");
+		//PUNTO 1. Crear docente.
+		//crearDocente();
+
+		//PUNTO 2. Crear curso.
+		//almacenarAsignatura();
+		//crearCurso();
+
+		//PUNTO 3. Crear franja horaria.
+		//almacenarEspacioFisico();
+		//crearFranjaHoraria();
+
+		//PUNTO 4. Listar franjas horarias.
+		//listarFranjasHorarias();
+
+		//PUNTO 5. Consultar franja horaria por docente.
+		//consultarFranjaHorariaporDocente();
+
+		//PUNTO 6.Eliminar curso:
+		eliminarCurso();
+
+
 	}
 	public void crearDocente(){
 		Docente objDocente=new Docente("Juan camilo","Alegria","juanca@unicauca.edu");
@@ -106,7 +125,7 @@ public class RelacionesJpaApplication implements CommandLineRunner{
 			System.out.println("El curso no ha sido creado ");
 		}
 
-		Optional<EspacioFisico> objEspacioFisico=this.servicioBDEspacioFisico.findById(1);
+		Optional<EspacioFisico> objEspacioFisico=this.servicioBDEspacioFisico.findById(4);
 		if(objEspacioFisico!=null){
 			espacioFisico=objEspacioFisico.get();
 		}else{
@@ -115,7 +134,10 @@ public class RelacionesJpaApplication implements CommandLineRunner{
 
 		Time horaInicio = Time.valueOf("07:00:00"); 
         Time horaFin = Time.valueOf("9:00:00"); 
-		FranjaHoraria objFranjaHoraria=new FranjaHoraria("martes",horaInicio,horaFin);
+
+
+		FranjaHoraria objFranjaHoraria=new FranjaHoraria("martes",horaInicio ,horaFin);
+		
 		objFranjaHoraria.setObjCurso(curso);
 		objFranjaHoraria.setObjEspacioFisico(espacioFisico);
 
@@ -124,21 +146,25 @@ public class RelacionesJpaApplication implements CommandLineRunner{
 	public void listarFranjasHorarias(){
 		Iterable<FranjaHoraria> listaFranjasHorarias=this.servicioBDFranjaHoraria.findAll();
 		for (FranjaHoraria objFranja : listaFranjasHorarias) {
-			System.out.println("Dia"+objFranja.getDia());
-			System.out.println("Hora Inicio"+objFranja.getHora_inicio());
-			System.out.println("Hora Fin"+objFranja.getHora_fin());
-			System.out.println("Nombre del curso"+objFranja.getObjCurso().getNombre());
+			System.out.println("************************");
+			System.out.println("Dia: "+objFranja.getDia());
+			System.out.println("Hora Inicio: "+objFranja.getHora_inicio());
+			System.out.println("Hora Fin: "+objFranja.getHora_fin());
+			System.out.println("Nombre del curso: "+objFranja.getObjCurso().getNombre());
 			System.out.println("Nombre espacio Fisico: "+objFranja.getObjEspacioFisico().getNombre());
 			System.out.println("Capacidad espacio Fisico: "+objFranja.getObjEspacioFisico().getCapacidad());
+			System.out.println("************************");
+
 		}
 
 	}
-	public void consultarFranjaHorariaporDcente(){
+	public void consultarFranjaHorariaporDocente(){
 		Optional<Docente> objDocente=this.servicioBDDocente.findById(1);
 		
 
 		if(objDocente!=null){
-			System.out.println("Id:"+objDocente.get().getId());
+			System.out.println("************************");
+			System.out.println("Id: "+objDocente.get().getId());
 			System.out.println("Nombre: "+objDocente.get().getNombre());
 			System.out.println("Apelldio: "+objDocente.get().getApellido());
 			System.out.println("Correo: "+objDocente.get().getCorreo());
@@ -153,7 +179,7 @@ public class RelacionesJpaApplication implements CommandLineRunner{
 					System.out.println("Id espacio Fisico: "+objFranja.getObjEspacioFisico().getId());
 					System.out.println("Nombre de espacio fisico: "+objFranja.getObjEspacioFisico().getNombre());
 					System.out.println("Capacidad de espacio fisico: "+objFranja.getObjEspacioFisico().getCapacidad());
-
+					System.out.println("************************");
 				}
 			}
 
@@ -165,7 +191,17 @@ public class RelacionesJpaApplication implements CommandLineRunner{
 
 	}
 	public void eliminarCurso(){
-		this.servicioBDCurso.deleteById(1);
+
+		Optional<Curso> objCurso=this.servicioBDCurso.findById(1);
+		if(objCurso!=null){
+				this.servicioBDCurso.deleteById(objCurso.get().getId());
+				System.out.println("El curso y las franjas horarias se eliminaron exitosamente");
+		}else{
+			System.out.println("El Curso que deseas eliminar no existe");
+		}
+
+
+		
 
 	}
 }

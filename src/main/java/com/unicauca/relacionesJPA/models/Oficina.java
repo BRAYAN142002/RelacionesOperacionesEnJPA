@@ -10,7 +10,7 @@ import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
@@ -18,7 +18,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @AllArgsConstructor
-@RequiredArgsConstructor
+@NoArgsConstructor
 public class Oficina {
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
@@ -27,7 +27,7 @@ public class Oficina {
     private String nombre;
     @Column(name="ubicacion", nullable=false,length=50)
     private String ubicacion;
-    @OneToOne(cascade =CascadeType.PERSIST, mappedBy="objOficina")
+    @OneToOne(cascade ={CascadeType.PERSIST}, mappedBy="objOficina")
     private Docente objDocente; 
 
     public Oficina(String nombre,String ubicacion){

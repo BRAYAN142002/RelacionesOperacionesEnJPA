@@ -23,20 +23,15 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Docente extends  Persona {
-    /* 
-    @Id
-    @GeneratedValue(strategy=GenerationType.IDENTITY)
-    private Integer id;
-    */
     public Docente(String nombre,String apellido,String correo){
         super(nombre,apellido,correo);
     }
 
-    @OneToOne(cascade={CascadeType.PERSIST,CascadeType.REMOVE})
+    @OneToOne(cascade={CascadeType.PERSIST})
     @JoinColumn(name="oficina_id")
     private Oficina objOficina;
 
-    @ManyToMany(mappedBy="listaDocentes")
+    @ManyToMany(cascade={CascadeType.PERSIST},mappedBy="listaDocentes")
     private List<Curso>listaCursos;
     
 }

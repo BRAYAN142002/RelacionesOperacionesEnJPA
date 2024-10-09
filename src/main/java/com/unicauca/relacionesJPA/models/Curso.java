@@ -2,6 +2,7 @@ package com.unicauca.relacionesJPA.models;
 
 import java.util.List;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -16,6 +17,7 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
@@ -23,6 +25,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @AllArgsConstructor
+@NoArgsConstructor
 public class Curso {
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
@@ -30,14 +33,14 @@ public class Curso {
     @Column(name="nombre",nullable=false,length=70)
     private String nombre;
 
-    @OneToMany(fetch=FetchType.LAZY,mappedBy="objCurso")
+    @OneToMany(cascade={CascadeType.PERSIST,CascadeType.REMOVE},fetch=FetchType.LAZY,mappedBy="objCurso")
     private List<FranjaHoraria> franjasHorarias;
 
-    @ManyToOne
+    @ManyToOne(cascade={CascadeType.PERSIST},fetch=FetchType.LAZY)
     @JoinColumn(name="asignatura_id")
     private Asignatura objAsignatura;
 
-    @ManyToMany(fetch=FetchType.LAZY)
+    @ManyToMany( cascade={CascadeType.PERSIST},fetch=FetchType.LAZY)
     @JoinTable(name="curso_docente",
                 joinColumns = @JoinColumn(name= "idCurso"),
                 inverseJoinColumns = @JoinColumn(name= "idDocente"))

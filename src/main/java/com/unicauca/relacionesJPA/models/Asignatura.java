@@ -2,6 +2,7 @@ package com.unicauca.relacionesJPA.models;
 
 import java.util.List;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -12,6 +13,7 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
@@ -19,6 +21,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @AllArgsConstructor
+@NoArgsConstructor
 public class Asignatura {
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
@@ -27,7 +30,7 @@ public class Asignatura {
     private String nombre;
     @Column(name="codigo",nullable=false,length=50)
     private String codigo;
-    @OneToMany(fetch=FetchType.LAZY, mappedBy="objAsignatura")
+    @OneToMany(cascade={CascadeType.PERSIST},fetch=FetchType.LAZY, mappedBy="objAsignatura")
     private List<Curso> cursos;
 
     public Asignatura(String nombre,String codigo){
